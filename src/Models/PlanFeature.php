@@ -54,7 +54,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class PlanFeature extends Model implements Sortable
 {
     use HasSlug;
-    use SoftDeletes;
     use BelongsToPlan;
     use SortableTrait;
     use HasTranslations;
