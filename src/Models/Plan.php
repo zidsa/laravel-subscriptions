@@ -84,6 +84,8 @@ class Plan extends Model implements Sortable
         'description',
         'is_active',
         'price',
+        'app_id',
+        'purchasable_id',
         'signup_fee',
         'currency',
         'trial_period',

@@ -82,6 +82,7 @@ class PlanSubscription extends Model
         'slug',
         'name',
         'description',
+        'app_id',
         'trial_ends_at',
         'starts_at',
         'ends_at',
