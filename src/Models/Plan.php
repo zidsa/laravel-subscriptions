@@ -110,6 +110,8 @@ class Plan extends Model implements Sortable
         'price' => 'float',
         'signup_fee' => 'float',
         'currency' => 'string',
+        'app_id' => 'integer',
+        'purchasable_id' => 'string',
         'trial_period' => 'integer',
         'trial_interval' => 'string',
         'invoice_period' => 'integer',
