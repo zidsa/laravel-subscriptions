@@ -276,6 +276,13 @@ class Plan extends Model implements Sortable
     }
 
     /**
+     * Get app_id for that plan
+     */
+    public function getAppId()
+    {
+        return $this->app_id;
+    }
+    /**
      * Activate the plan.
      *
      * @return $this

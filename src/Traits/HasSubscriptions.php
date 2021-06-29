@@ -101,9 +101,35 @@ trait HasSubscriptions
         return $this->subscriptions()->create([
             'name' => $subscription,
             'plan_id' => $plan->getKey(),
+            'app_id' => $plan->getAppId(),
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate(),
         ]);
     }
+
+
+    /**
+     * Subscribe subscriber to a new free trial plan.
+     *
+     * @param string                            $subscription
+     * @param \Rinvex\Subscriptions\Models\Plan $plan
+     * @param \Carbon\Carbon|null               $startDate
+     *
+     * @return \Rinvex\Subscriptions\Models\PlanSubscription
+     */
+    public function activateFreeTrial($subscription, Plan $plan, Carbon $startDate = null): PlanSubscription
+    {
+        $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
+
+        return $this->subscriptions()->create([
+            'name' => $subscription,
+            'plan_id' => $plan->getKey(),
+            'app_id' => $plan->getAppId(),
+            'trial_ends_at' => $trial->getEndDate(),
+            'starts_at' => $trial->getStartDate(),
+            'ends_at' => $trial->getEndDate(),
+        ]);
+    }
+
 }
