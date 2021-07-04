@@ -83,6 +83,8 @@ class PlanSubscription extends Model
         'name',
         'description',
         'app_id',
+        'status',
+        'is_renewable',
         'trial_ends_at',
         'starts_at',
         'ends_at',
@@ -268,13 +270,15 @@ class PlanSubscription extends Model
      *
      * @return $this
      */
-    public function cancel($immediately = false)
+    public function cancel($immediately = false, $status)
     {
         $this->canceled_at = Carbon::now();
 
         if ($immediately) {
             $this->ends_at = $this->canceled_at;
         }
+
+        $this->status = $status;
 
         $this->save();
 

@@ -93,7 +93,7 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\PlanSubscription
      */
-    public function newSubscription($subscription, Plan $plan, Carbon $startDate = null): PlanSubscription
+    public function newSubscription($subscription, Plan $plan, Carbon $startDate = null, $status, $isRenewable = true): PlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period, $trial->getEndDate());
@@ -102,7 +102,33 @@ trait HasSubscriptions
             'name' => $subscription,
             'plan_id' => $plan->getKey(),
             'app_id' => $plan->getAppId(),
+            'status' => $status,
+            'is_renewable' => $isRenewable,
             'trial_ends_at' => $trial->getEndDate(),
+            'starts_at' => $period->getStartDate(),
+            'ends_at' => $period->getEndDate(),
+        ]);
+    }
+
+    /**
+     * Subscribe subscriber to a new plan with trial since the user has already subscribed to the trial before
+     *
+     * @param string                            $subscription
+     * @param \Rinvex\Subscriptions\Models\Plan $plan
+     * @param \Carbon\Carbon|null               $startDate
+     *
+     * @return \Rinvex\Subscriptions\Models\PlanSubscription
+     */
+    public function newSubscriptionWithoutTrial($subscription, Plan $plan, Carbon $startDate = null, $status, $isRenewable = true): PlanSubscription
+    {
+        $period = new Period($plan->invoice_interval, $plan->invoice_period, $startDate ?? now());
+
+        return $this->subscriptions()->create([
+            'name' => $subscription,
+            'plan_id' => $plan->getKey(),
+            'app_id' => $plan->getAppId(),
+            'status' => $status,
+            'is_renewable' => $isRenewable,
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate(),
         ]);
@@ -118,7 +144,7 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\PlanSubscription
      */
-    public function activateFreeTrial($subscription, Plan $plan, Carbon $startDate = null): PlanSubscription
+    public function activateFreeTrial($subscription, Plan $plan, Carbon $startDate = null, $status, $isRenewable = true): PlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
 
@@ -126,6 +152,8 @@ trait HasSubscriptions
             'name' => $subscription,
             'plan_id' => $plan->getKey(),
             'app_id' => $plan->getAppId(),
+            'status' => $status,
+            'is_renewable' => $isRenewable,
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $trial->getStartDate(),
             'ends_at' => $trial->getEndDate(),
