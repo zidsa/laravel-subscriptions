@@ -104,6 +104,7 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_renewable' => $isRenewable,
+            'amount_left' => $plan->price > 0 ? $plan->price * 100 : 0,
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate(),
@@ -129,6 +130,7 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_renewable' => $isRenewable,
+            'amount_left' => $plan->price > 0 ? $plan->price * 100 : 0,
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate(),
         ]);
@@ -154,6 +156,7 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_renewable' => $isRenewable,
+            'amount_left' => $plan->price > 0 ? $plan->price * 100 : 0,
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $trial->getStartDate(),
             'ends_at' => $trial->getEndDate(),
