@@ -85,6 +85,7 @@ class PlanSubscription extends Model
         'app_id',
         'status',
         'is_renewable',
+        'amount_left',
         'trial_ends_at',
         'starts_at',
         'ends_at',
