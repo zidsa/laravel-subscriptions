@@ -30,6 +30,7 @@ class CreatePlanSubscriptionsTable extends Migration
             $table->dateTime('canceled_at')->nullable();
             $table->smallInteger('is_renewable')->unsigned()->default(1);
             $table->unsignedInteger('amount_left')->nullable();
+            $table->uuid('purchase_id')->nullable()->default(null);
             $table->string('timezone')->nullable();
             $table->timestamps();
             $table->softDeletes();

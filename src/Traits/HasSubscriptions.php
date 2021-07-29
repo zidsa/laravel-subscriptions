@@ -93,7 +93,7 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\PlanSubscription
      */
-    public function newSubscription($subscription, Plan $plan, Carbon $startDate = null, $status, $isRenewable = true): PlanSubscription
+    public function newSubscription($purchaseId, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRenewable = true): PlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period, $trial->getEndDate());
@@ -108,6 +108,7 @@ trait HasSubscriptions
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate(),
+            'purchase_id' => $purchaseId,
         ]);
     }
 
@@ -120,7 +121,7 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\PlanSubscription
      */
-    public function newSubscriptionWithoutTrial($subscription, Plan $plan, Carbon $startDate = null, $status, $isRenewable = true): PlanSubscription
+    public function newSubscriptionWithoutTrial($purchaseId, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRenewable = true): PlanSubscription
     {
         $period = new Period($plan->invoice_interval, $plan->invoice_period, $startDate ?? now());
 
@@ -133,6 +134,7 @@ trait HasSubscriptions
             'amount_left' => $plan->price > 0 ? $plan->price * 100 : 0,
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate(),
+            'purchase_id' => $purchaseId,
         ]);
     }
 
@@ -146,7 +148,7 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\PlanSubscription
      */
-    public function activateFreeTrial($subscription, Plan $plan, Carbon $startDate = null, $status, $isRenewable = true): PlanSubscription
+    public function activateFreeTrial($purchaseId, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRenewable = true): PlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
 
@@ -160,6 +162,7 @@ trait HasSubscriptions
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $trial->getStartDate(),
             'ends_at' => $trial->getEndDate(),
+            'purchase_id' => $purchaseId,
         ]);
     }
 
