@@ -28,7 +28,9 @@ class CreatePlanSubscriptionsTable extends Migration
             $table->dateTime('ends_at')->nullable();
             $table->dateTime('cancels_at')->nullable();
             $table->dateTime('canceled_at')->nullable();
-            $table->smallInteger('is_renewable')->unsigned()->default(1);
+            $table->boolean('is_recurring')->default(false);
+            $table->unsignedInteger('recurring_retry')->unsigned()->default(0);
+            $table->string('recurring_status')->nullable()->default(null);
             $table->unsignedInteger('amount_left')->nullable();
             $table->uuid('purchase_id')->nullable()->default(null);
             $table->string('timezone')->nullable();
