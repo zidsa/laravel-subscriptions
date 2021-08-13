@@ -78,6 +78,7 @@ class PlanSubscription extends Model
     protected $fillable = [
         'subscriber_id',
         'subscriber_type',
+        'store_uuid',
         'plan_id',
         'slug',
         'name',

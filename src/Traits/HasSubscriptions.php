@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rinvex\Subscriptions\Traits;
 
 use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 use Rinvex\Subscriptions\Models\Plan;
 use Rinvex\Subscriptions\Services\Period;
 use Illuminate\Database\Eloquent\Collection;
@@ -93,13 +94,15 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\PlanSubscription
      */
-    public function newSubscription($purchaseId, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false): PlanSubscription
+    public function newSubscription($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false): PlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period, $trial->getEndDate());
 
         return $this->subscriptions()->create([
             'name' => $subscription,
+            'uuid' => Uuid::uuid4()->toString(),
+            'store_uuid' => $storeUUid,
             'plan_id' => $plan->getKey(),
             'app_id' => $plan->getAppId(),
             'status' => $status,
@@ -121,12 +124,14 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\PlanSubscription
      */
-    public function newSubscriptionWithoutTrial($purchaseId, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false): PlanSubscription
+    public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false): PlanSubscription
     {
         $period = new Period($plan->invoice_interval, $plan->invoice_period, $startDate ?? now());
 
         return $this->subscriptions()->create([
             'name' => $subscription,
+            'uuid' => Uuid::uuid4()->toString(),
+            'store_uuid' => $storeUUid,
             'plan_id' => $plan->getKey(),
             'app_id' => $plan->getAppId(),
             'status' => $status,
@@ -148,12 +153,14 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\PlanSubscription
      */
-    public function activateFreeTrial($purchaseId, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false): PlanSubscription
+    public function activateFreeTrial($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false): PlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
 
         return $this->subscriptions()->create([
             'name' => $subscription,
+            'uuid' => Uuid::uuid4()->toString(),
+            'store_uuid' => $storeUUid,
             'plan_id' => $plan->getKey(),
             'app_id' => $plan->getAppId(),
             'status' => $status,
