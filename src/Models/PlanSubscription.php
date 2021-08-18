@@ -78,6 +78,8 @@ class PlanSubscription extends Model
     protected $fillable = [
         'subscriber_id',
         'subscriber_type',
+        'purchase_id',
+        'uuid',
         'store_uuid',
         'plan_id',
         'slug',
@@ -192,9 +194,9 @@ class PlanSubscription extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-                          ->doNotGenerateSlugsOnUpdate()
-                          ->generateSlugsFrom('name')
-                          ->saveSlugsTo('slug');
+            ->doNotGenerateSlugsOnUpdate()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
     }
 
     /**
