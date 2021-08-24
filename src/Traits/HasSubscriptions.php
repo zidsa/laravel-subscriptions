@@ -165,7 +165,7 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_recurring' => $isRecurring,
-            'amount_left' => $plan->price > 0 ? $plan->price * 100 : 0,
+            'amount_left' => 0,
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $trial->getStartDate(),
             'ends_at' => $trial->getEndDate()->addDay($remainingDays),
