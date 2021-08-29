@@ -276,7 +276,7 @@ class PlanSubscription extends Model
      *
      * @return $this
      */
-    public function cancel($immediately = false, $status)
+    public function cancel($status, $immediately = false)
     {
         $this->canceled_at = Carbon::now();
 
