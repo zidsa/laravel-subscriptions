@@ -18,7 +18,7 @@ class CreatePlansTable extends Migration
             // Columns
             $table->increments('id');
             $table->integer('app_id')->unsigned();
-            $table->uuid('purchasable_id')->unsigned();
+            $table->uuid('purchasable_id');
             $table->string('slug');
             $table->{$this->jsonable()}('name');
             $table->{$this->jsonable()}('description')->nullable();
