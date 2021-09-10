@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rinvex\Subscriptions\Traits;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 use Rinvex\Subscriptions\Models\Plan;
 use Rinvex\Subscriptions\Services\Period;
@@ -128,6 +129,10 @@ trait HasSubscriptions
     {
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $startDate ?? now());
 
+        Log::info($plan->invoice_period);
+        Log::info($period->getStartDate());
+        Log::info($period->getEndDate());
+
         return $this->subscriptions()->create([
             'name' => $subscription,
             'uuid' => Uuid::uuid4()->toString(),
@@ -156,6 +161,10 @@ trait HasSubscriptions
     public function activateFreeTrial($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): PlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period - 1, $startDate ?? now());
+
+        Log::info($plan->trial_period);
+        Log::info($trial->getStartDate());
+        Log::info($trial->getEndDate());
 
         return $this->subscriptions()->create([
             'name' => $subscription,
