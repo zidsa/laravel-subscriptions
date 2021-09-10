@@ -96,8 +96,8 @@ trait HasSubscriptions
      */
     public function newSubscription($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): PlanSubscription
     {
-        $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
-        $period = new Period($plan->invoice_interval, $plan->invoice_period, $trial->getEndDate());
+        $trial = new Period($plan->trial_interval, $plan->trial_period - 1 , $startDate ?? now());
+        $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $trial->getEndDate());
 
         return $this->subscriptions()->create([
             'name' => $subscription,
@@ -126,7 +126,7 @@ trait HasSubscriptions
      */
     public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): PlanSubscription
     {
-        $period = new Period($plan->invoice_interval, $plan->invoice_period, $startDate ?? now());
+        $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $startDate ?? now());
 
         return $this->subscriptions()->create([
             'name' => $subscription,
@@ -155,7 +155,7 @@ trait HasSubscriptions
      */
     public function activateFreeTrial($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): PlanSubscription
     {
-        $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
+        $trial = new Period($plan->trial_interval, $plan->trial_period - 1, $startDate ?? now());
 
         return $this->subscriptions()->create([
             'name' => $subscription,
