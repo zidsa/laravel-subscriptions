@@ -160,7 +160,7 @@ trait HasSubscriptions
      */
     public function activateFreeTrial($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): PlanSubscription
     {
-        $trial = new Period($plan->trial_interval, $plan->trial_period - 2, $startDate ?? now());
+        $trial = new Period($plan->trial_interval, $plan->trial_period - 1, $startDate ?? now());
 
         Log::info($plan->trial_period);
         Log::info($trial->getStartDate());
