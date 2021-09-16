@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rinvex\Subscriptions\Providers;
 
-use Rinvex\Subscriptions\Models\Plan;
+use Rinvex\Subscriptions\Models\AppMarketPlan;
 use Illuminate\Support\ServiceProvider;
 use Rinvex\Support\Traits\ConsoleTools;
-use Rinvex\Subscriptions\Models\PlanFeature;
-use Rinvex\Subscriptions\Models\PlanSubscription;
-use Rinvex\Subscriptions\Models\PlanSubscriptionUsage;
+use Rinvex\Subscriptions\Models\AppMarketPlanFeature;
+use Rinvex\Subscriptions\Models\AppMarketPlanSubscription;
+use Rinvex\Subscriptions\Models\AppMarketPlanSubscriptionUsage;
 use Rinvex\Subscriptions\Console\Commands\MigrateCommand;
 use Rinvex\Subscriptions\Console\Commands\PublishCommand;
 use Rinvex\Subscriptions\Console\Commands\RollbackCommand;
@@ -40,10 +40,10 @@ class SubscriptionsServiceProvider extends ServiceProvider
 
         // Bind eloquent models to IoC container
         $this->registerModels([
-            'rinvex.subscriptions.plan' => Plan::class,
-            'rinvex.subscriptions.plan_feature' => PlanFeature::class,
-            'rinvex.subscriptions.plan_subscription' => PlanSubscription::class,
-            'rinvex.subscriptions.plan_subscription_usage' => PlanSubscriptionUsage::class,
+            'rinvex.subscriptions.app_market_plan' => AppMarketPlan::class,
+            'rinvex.subscriptions.app_market_plan_feature' => AppMarketPlanFeature::class,
+            'rinvex.subscriptions.app_market_plan_subscription' => AppMarketPlanSubscription::class,
+            'rinvex.subscriptions.app_market_plan_subscription_usage' => AppMarketPlanSubscriptionUsage::class,
         ]);
 
         // Register console commands

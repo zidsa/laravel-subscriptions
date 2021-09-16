@@ -37,34 +37,34 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Rinvex\Subscriptions\Models\Plan                                                             $plan
- * @property-read \Illuminate\Database\Eloquent\Collection|\Rinvex\Subscriptions\Models\PlanSubscriptionUsage[] $usage
+ * @property-read \Rinvex\Subscriptions\Models\AppMarketPlan                                                             $plan
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Rinvex\Subscriptions\Models\AppMarketPlanSubscriptionUsage[] $usage
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent                                                 $subscriber
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription byPlanId($planId)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription findEndedPeriod()
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription findEndedTrial()
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription findEndingPeriod($dayRange = 3)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription findEndingTrial($dayRange = 3)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription ofSubscriber(\Illuminate\Database\Eloquent\Model $subscriber)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereCanceledAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereCancelsAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereEndsAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription wherePlanId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereStartsAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereTrialEndsAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereSubscriberId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\PlanSubscription whereSubscriberType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription byPlanId($planId)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription findEndedPeriod()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription findEndedTrial()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription findEndingPeriod($dayRange = 3)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription findEndingTrial($dayRange = 3)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription ofSubscriber(\Illuminate\Database\Eloquent\Model $subscriber)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereCanceledAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereCancelsAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereEndsAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription wherePlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereStartsAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereTrialEndsAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereSubscriberId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Subscriptions\Models\AppMarketPlanSubscription whereSubscriberType($value)
  * @mixin \Eloquent
  */
-class PlanSubscription extends Model
+class AppMarketPlanSubscription extends Model
 {
     use HasSlug;
     use SoftDeletes;
@@ -156,12 +156,12 @@ class PlanSubscription extends Model
     {
         parent::__construct($attributes);
 
-        $this->setTable(config('rinvex.subscriptions.tables.plan_subscriptions'));
+        $this->setTable(config('rinvex.subscriptions.tables.app_market_plan_subscriptions'));
         $this->setRules([
             'name' => 'required|string|strip_tags|max:150',
             'description' => 'nullable|string|max:32768',
-            'slug' => 'required|alpha_dash|max:150|unique:'.config('rinvex.subscriptions.tables.plan_subscriptions').',slug',
-            'plan_id' => 'required|integer|exists:'.config('rinvex.subscriptions.tables.plans').',id',
+            'slug' => 'required|alpha_dash|max:150|unique:'.config('rinvex.subscriptions.tables.app_market_plan_subscriptions').',slug',
+            'plan_id' => 'required|integer|exists:'.config('rinvex.subscriptions.tables.app_market_plans').',id',
             'subscriber_id' => 'required|integer',
             'subscriber_type' => 'required|string|strip_tags|max:150',
             'trial_ends_at' => 'nullable|date',
@@ -216,7 +216,7 @@ class PlanSubscription extends Model
      */
     public function usage(): hasMany
     {
-        return $this->hasMany(config('rinvex.subscriptions.models.plan_subscription_usage'), 'subscription_id', 'id');
+        return $this->hasMany(config('rinvex.subscriptions.models.app_market_plan_subscription_usage'), 'subscription_id', 'id');
     }
 
     /**
@@ -294,11 +294,11 @@ class PlanSubscription extends Model
     /**
      * Change subscription plan.
      *
-     * @param \Rinvex\Subscriptions\Models\Plan $plan
+     * @param \Rinvex\Subscriptions\Models\AppMarketPlan $plan
      *
      * @return $this
      */
-    public function changePlan(Plan $plan)
+    public function changePlan(AppMarketPlan $plan)
     {
         // If plans does not have the same billing frequency
         // (e.g., invoice_interval and invoice_period) we will update
@@ -446,9 +446,9 @@ class PlanSubscription extends Model
      * @param string $featureSlug
      * @param int    $uses
      *
-     * @return \Rinvex\Subscriptions\Models\PlanSubscriptionUsage
+     * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscriptionUsage
      */
-    public function recordFeatureUsage(string $featureSlug, int $uses = 1, bool $incremental = true): PlanSubscriptionUsage
+    public function recordFeatureUsage(string $featureSlug, int $uses = 1, bool $incremental = true): AppMarketPlanSubscriptionUsage
     {
         $feature = $this->plan->features()->where('slug', $featureSlug)->first();
 
@@ -484,9 +484,9 @@ class PlanSubscription extends Model
      * @param string $featureSlug
      * @param int    $uses
      *
-     * @return \Rinvex\Subscriptions\Models\PlanSubscriptionUsage|null
+     * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscriptionUsage|null
      */
-    public function reduceFeatureUsage(string $featureSlug, int $uses = 1): ?PlanSubscriptionUsage
+    public function reduceFeatureUsage(string $featureSlug, int $uses = 1): ?AppMarketPlanSubscriptionUsage
     {
         $usage = $this->usage()->byFeatureSlug($featureSlug)->first();
 

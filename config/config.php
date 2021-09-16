@@ -9,21 +9,19 @@ return [
 
     // Subscriptions Database Tables
     'tables' => [
-
-        'plans' => 'plans',
-        'plan_features' => 'plan_features',
-        'plan_subscriptions' => 'plan_subscriptions',
-        'plan_subscription_usage' => 'plan_subscription_usage',
-
+        'app_market_plans' => 'app_market_plans',
+        'app_market_plan_features' => 'app_market_plan_features',
+        'app_market_plan_subscriptions' => 'app_market_plan_subscriptions',
+        'app_market_plan_subscription_usage' => 'app_market_plan_subscription_usage',
     ],
 
     // Subscriptions Models
     'models' => [
 
-        'plan' => \Rinvex\Subscriptions\Models\Plan::class,
-        'plan_feature' => \Rinvex\Subscriptions\Models\PlanFeature::class,
-        'plan_subscription' => \Rinvex\Subscriptions\Models\PlanSubscription::class,
-        'plan_subscription_usage' => \Rinvex\Subscriptions\Models\PlanSubscriptionUsage::class,
+        'app_market_plan' => \Rinvex\Subscriptions\Models\AppMarketPlan::class,
+        'app_market_plan_feature' => \Rinvex\Subscriptions\Models\AppMarketPlanFeature::class,
+        'app_market_plan_subscription' => \Rinvex\Subscriptions\Models\AppMarketPlanSubscription::class,
+        'app_market_plan_subscription_usage' => \Rinvex\Subscriptions\Models\AppMarketPlanSubscriptionUsage::class,
 
     ],
 

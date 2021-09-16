@@ -7,10 +7,10 @@ namespace Rinvex\Subscriptions\Traits;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
-use Rinvex\Subscriptions\Models\Plan;
+use Rinvex\Subscriptions\Models\AppMarketPlan;
 use Rinvex\Subscriptions\Services\Period;
 use Illuminate\Database\Eloquent\Collection;
-use Rinvex\Subscriptions\Models\PlanSubscription;
+use Rinvex\Subscriptions\Models\AppMarketPlanSubscription;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasSubscriptions
@@ -35,7 +35,7 @@ trait HasSubscriptions
      */
     public function subscriptions(): MorphMany
     {
-        return $this->morphMany(config('rinvex.subscriptions.models.plan_subscription'), 'subscriber', 'subscriber_type', 'subscriber_id');
+        return $this->morphMany(config('rinvex.subscriptions.models.app_market_plan_subscription'), 'subscriber', 'subscriber_type', 'subscriber_id');
     }
 
     /**
@@ -53,9 +53,9 @@ trait HasSubscriptions
      *
      * @param string $subscriptionSlug
      *
-     * @return \Rinvex\Subscriptions\Models\PlanSubscription|null
+     * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription|null
      */
-    public function subscription(string $subscriptionSlug): ?PlanSubscription
+    public function subscription(string $subscriptionSlug): ?AppMarketPlanSubscription
     {
         return $this->subscriptions()->where('slug', $subscriptionSlug)->first();
     }
@@ -63,13 +63,13 @@ trait HasSubscriptions
     /**
      * Get subscribed plans.
      *
-     * @return \Rinvex\Subscriptions\Models\PlanSubscription|null
+     * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription|null
      */
-    public function subscribedPlans(): ?PlanSubscription
+    public function subscribedPlans(): ?AppMarketPlanSubscription
     {
         $planIds = $this->subscriptions->reject->inactive()->pluck('plan_id')->unique();
 
-        return app('rinvex.subscriptions.plan')->whereIn('id', $planIds)->get();
+        return app('rinvex.subscriptions.app_market_plan')->whereIn('id', $planIds)->get();
     }
 
     /**
@@ -90,12 +90,12 @@ trait HasSubscriptions
      * Subscribe subscriber to a new plan.
      *
      * @param string                            $subscription
-     * @param \Rinvex\Subscriptions\Models\Plan $plan
+     * @param \Rinvex\Subscriptions\Models\AppMarketPlan $plan
      * @param \Carbon\Carbon|null               $startDate
      *
-     * @return \Rinvex\Subscriptions\Models\PlanSubscription
+     * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription
      */
-    public function newSubscription($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): PlanSubscription
+    public function newSubscription($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): AppMarketPlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period - 1 , $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $trial->getEndDate());
@@ -120,12 +120,12 @@ trait HasSubscriptions
      * Subscribe subscriber to a new plan with trial since the user has already subscribed to the trial before
      *
      * @param string                            $subscription
-     * @param \Rinvex\Subscriptions\Models\Plan $plan
+     * @param \Rinvex\Subscriptions\Models\AppMarketPlan $plan
      * @param \Carbon\Carbon|null               $startDate
      *
-     * @return \Rinvex\Subscriptions\Models\PlanSubscription
+     * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription
      */
-    public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): PlanSubscription
+    public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): AppMarketPlanSubscription
     {
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $startDate ?? now());
 
@@ -153,12 +153,12 @@ trait HasSubscriptions
      * Subscribe subscriber to a new free trial plan.
      *
      * @param string                            $subscription
-     * @param \Rinvex\Subscriptions\Models\Plan $plan
+     * @param \Rinvex\Subscriptions\Models\AppMarketPlan $plan
      * @param \Carbon\Carbon|null               $startDate
      *
-     * @return \Rinvex\Subscriptions\Models\PlanSubscription
+     * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription
      */
-    public function activateFreeTrial($purchaseId, $storeUUid, $subscription, Plan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): PlanSubscription
+    public function activateFreeTrial($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): AppMarketPlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period - 1, $startDate ?? now());
 
