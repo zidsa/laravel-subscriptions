@@ -95,7 +95,7 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription
      */
-    public function newSubscription($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): AppMarketPlanSubscription
+    public function newSubscription($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15): AppMarketPlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period - 1 , $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $trial->getEndDate());
@@ -108,7 +108,7 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_recurring' => $isRecurring,
-            'amount_left' => $plan->price > 0 ? $plan->price * 100 + ($plan->price * VatSettings::TAX_PERCENTAGE) : 0,
+            'amount_left' => $plan->price > 0 ? $plan->price * 100 + ($plan->price * $tax_percentage) : 0,
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate()->addDay($remainingDays),
@@ -125,7 +125,7 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription
      */
-    public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): AppMarketPlanSubscription
+    public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15): AppMarketPlanSubscription
     {
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $startDate ?? now());
 
@@ -137,7 +137,7 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_recurring' => $isRecurring,
-            'amount_left' => $plan->price > 0 ? $plan->price * 100 + ($plan->price * VatSettings::TAX_PERCENTAGE) : 0,
+            'amount_left' => $plan->price > 0 ? $plan->price * 100 + ($plan->price * $tax_percentage) : 0,
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate()->addDay($remainingDays),
             'purchase_id' => $purchaseId,
