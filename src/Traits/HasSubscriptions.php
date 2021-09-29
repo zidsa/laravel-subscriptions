@@ -108,7 +108,7 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_recurring' => $isRecurring,
-            'amount_left' => $plan->price > 0 ? $plan->price * 100 : 0,
+            'amount_left' => $plan->price > 0 ? $plan->price * 100 + ($plan->price * VatSettings::TAX_PERCENTAGE) : 0,
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate()->addDay($remainingDays),
@@ -129,10 +129,6 @@ trait HasSubscriptions
     {
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $startDate ?? now());
 
-        Log::info($plan->invoice_period);
-        Log::info($period->getStartDate());
-        Log::info($period->getEndDate());
-
         return $this->subscriptions()->create([
             'name' => $subscription,
             'uuid' => Uuid::uuid4()->toString(),
@@ -141,7 +137,7 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_recurring' => $isRecurring,
-            'amount_left' => $plan->price > 0 ? $plan->price * 100 : 0,
+            'amount_left' => $plan->price > 0 ? $plan->price * 100 + ($plan->price * VatSettings::TAX_PERCENTAGE) : 0,
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate()->addDay($remainingDays),
             'purchase_id' => $purchaseId,
@@ -161,10 +157,6 @@ trait HasSubscriptions
     public function activateFreeTrial($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0): AppMarketPlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period - 1, $startDate ?? now());
-
-        Log::info($plan->trial_period);
-        Log::info($trial->getStartDate());
-        Log::info($trial->getEndDate());
 
         return $this->subscriptions()->create([
             'name' => $subscription,
