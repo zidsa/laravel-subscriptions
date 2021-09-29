@@ -34,6 +34,7 @@ class CreatePlanSubscriptionsTable extends Migration
             $table->unsignedInteger('recurring_retry')->unsigned()->default(0);
             $table->string('recurring_status')->nullable()->default(null);
             $table->unsignedInteger('amount_left')->nullable();
+            $table->unsignedInteger('amount_left_without_tax')->nullable();
             $table->uuid('purchase_id')->nullable()->default(null);
             $table->string('timezone')->nullable();
             $table->timestamps();

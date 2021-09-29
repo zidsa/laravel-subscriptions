@@ -91,6 +91,7 @@ class AppMarketPlanSubscription extends Model
         'recurring_retry',
         'recurring_status',
         'amount_left',
+        'amount_left_without_tax',
         'trial_ends_at',
         'starts_at',
         'ends_at',
