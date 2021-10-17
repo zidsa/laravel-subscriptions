@@ -42,8 +42,6 @@ class CreatePlanSubscriptionsTable extends Migration
 
             // Indexes
             $table->unique('slug');
-            $table->foreign('plan_id')->references('id')->on(config('rinvex.subscriptions.tables.app_market_plans'))
-                  ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
