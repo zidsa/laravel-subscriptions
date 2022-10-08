@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Rinvex\Support\Traits\ValidatingTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Rinvex\Subscriptions\Models\PlanSubscriptionUsage.
@@ -38,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class AppMarketPlanSubscriptionUsage extends Model
 {
+    use HasFactory;
     use SoftDeletes;
     use ValidatingTrait;
 
@@ -92,15 +94,15 @@ class AppMarketPlanSubscriptionUsage extends Model
      */
     public function __construct(array $attributes = [])
     {
-        parent::__construct($attributes);
-
         $this->setTable(config('rinvex.subscriptions.tables.app_market_plan_subscription_usage'));
-        $this->setRules([
+        $this->mergeRules([
             'subscription_id' => 'required|integer|exists:'.config('rinvex.subscriptions.tables.app_market_plan_subscriptions').',id',
             'feature_id' => 'required|integer|exists:'.config('rinvex.subscriptions.tables.app_market_plan_features').',id',
             'used' => 'required|integer',
             'valid_until' => 'nullable|date',
         ]);
+
+        parent::__construct($attributes);
     }
 
     /**
@@ -135,7 +137,7 @@ class AppMarketPlanSubscriptionUsage extends Model
     {
         $feature = app('rinvex.subscriptions.app_market_plan_feature')->where('slug', $featureSlug)->first();
 
-        return $builder->where('feature_id', $feature->getKey() ?? null);
+        return $builder->where('feature_id', $feature ? $feature->getKey() : null);
     }
 
     /**

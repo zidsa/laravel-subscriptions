@@ -13,6 +13,7 @@ use Rinvex\Support\Traits\ValidatingTrait;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Rinvex\Subscriptions\Models\Plan.
@@ -70,6 +71,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class AppMarketPlan extends Model implements Sortable
 {
     use HasSlug;
+    use HasFactory;
     use SoftDeletes;
     use SortableTrait;
     use HasTranslations;
@@ -175,10 +177,8 @@ class AppMarketPlan extends Model implements Sortable
      */
     public function __construct(array $attributes = [])
     {
-        parent::__construct($attributes);
-
         $this->setTable(config('rinvex.subscriptions.tables.app_market_plans'));
-        $this->setRules([
+        $this->mergeRules([
             'slug' => 'required|alpha_dash|max:150|unique:'.config('rinvex.subscriptions.tables.app_market_plans').',slug',
             'name' => 'required|string|strip_tags|max:150',
             'description' => 'nullable|string|max:32768',
@@ -198,6 +198,21 @@ class AppMarketPlan extends Model implements Sortable
             'prorate_extend_due' => 'nullable|integer|max:150',
             'active_subscribers_limit' => 'nullable|integer|max:100000',
         ]);
+
+        parent::__construct($attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function ($plan) {
+            $plan->features()->delete();
+            $plan->planSubscriptions()->delete();
+        });
     }
 
     /**

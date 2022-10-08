@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Rinvex\Subscriptions\Models\AppMarketPlanSubscription;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-trait HasSubscriptions
+trait HasPlanSubscriptions
 {
     /**
      * Define a polymorphic one-to-many relationship.
@@ -29,35 +29,47 @@ trait HasSubscriptions
     abstract public function morphMany($related, $name, $type = null, $id = null, $localKey = null);
 
     /**
-     * The subscriber may have many subscriptions.
+     * Boot the HasPlanSubscriptions trait for the model.
+     *
+     * @return void
+     */
+    protected static function bootHasSubscriptions()
+    {
+        static::deleted(function ($plan) {
+            $plan->planSubscriptions()->delete();
+        });
+    }
+
+    /**
+     * The subscriber may have many plan subscriptions.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function subscriptions(): MorphMany
+    public function planSubscriptions(): MorphMany
     {
         return $this->morphMany(config('rinvex.subscriptions.models.app_market_plan_subscription'), 'subscriber', 'subscriber_type', 'subscriber_id');
     }
 
     /**
-     * A model may have many active subscriptions.
+     * A model may have many active plan subscriptions.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function activeSubscriptions(): Collection
+    public function activePlanSubscriptions(): Collection
     {
-        return $this->subscriptions->reject->inactive();
+        return $this->planSubscriptions->reject->inactive();
     }
 
     /**
-     * Get a subscription by slug.
+     * Get a plan subscription by slug.
      *
      * @param string $subscriptionSlug
      *
      * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription|null
      */
-    public function subscription(string $subscriptionSlug): ?AppMarketPlanSubscription
+    public function planSubscription(string $subscriptionSlug): ?AppMarketPlanSubscription
     {
-        return $this->subscriptions()->where('slug', $subscriptionSlug)->first();
+        return $this->planSubscriptions()->where('slug', $subscriptionSlug)->first();
     }
 
     /**
@@ -67,7 +79,7 @@ trait HasSubscriptions
      */
     public function subscribedPlans(): ?AppMarketPlanSubscription
     {
-        $planIds = $this->subscriptions->reject->inactive()->pluck('plan_id')->unique();
+        $planIds = $this->planSubscriptions->reject->inactive()->pluck('plan_id')->unique();
 
         return app('rinvex.subscriptions.app_market_plan')->whereIn('id', $planIds)->get();
     }
@@ -81,7 +93,7 @@ trait HasSubscriptions
      */
     public function subscribedTo($planId): bool
     {
-        $subscription = $this->subscriptions()->where('plan_id', $planId)->first();
+        $subscription = $this->planSubscriptions()->where('plan_id', $planId)->first();
 
         return $subscription && $subscription->active();
     }
@@ -95,12 +107,12 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription
      */
-    public function newSubscription($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15): AppMarketPlanSubscription
+    public function newPlanSubscription($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15): AppMarketPlanSubscription
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period - 1 , $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $trial->getEndDate());
 
-        return $this->subscriptions()->create([
+        return $this->planSubscriptions()->create([
             'name' => $subscription,
             'uuid' => Uuid::uuid4()->toString(),
             'store_uuid' => $storeUUid,

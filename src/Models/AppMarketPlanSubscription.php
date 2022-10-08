@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Rinvex\Subscriptions\Traits\BelongsToPlan;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Rinvex\Subscriptions\Models\PlanSubscription.
@@ -67,6 +68,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class AppMarketPlanSubscription extends Model
 {
     use HasSlug;
+    use HasFactory;
     use SoftDeletes;
     use BelongsToPlan;
     use HasTranslations;
@@ -155,10 +157,8 @@ class AppMarketPlanSubscription extends Model
      */
     public function __construct(array $attributes = [])
     {
-        parent::__construct($attributes);
-
         $this->setTable(config('rinvex.subscriptions.tables.app_market_plan_subscriptions'));
-        $this->setRules([
+        $this->mergeRules([
             'name' => 'required|string|strip_tags|max:150',
             'description' => 'nullable|string|max:32768',
             'slug' => 'required|alpha_dash|max:150|unique:'.config('rinvex.subscriptions.tables.app_market_plan_subscriptions').',slug',
@@ -171,6 +171,8 @@ class AppMarketPlanSubscription extends Model
             'cancels_at' => 'nullable|date',
             'canceled_at' => 'nullable|date',
         ]);
+
+        parent::__construct($attributes);
     }
 
     /**
@@ -184,6 +186,10 @@ class AppMarketPlanSubscription extends Model
             if (! $model->starts_at || ! $model->ends_at) {
                 $model->setNewPeriod();
             }
+        });
+
+        static::deleted(function ($subscription) {
+            $subscription->usage()->delete();
         });
     }
 
@@ -412,6 +418,18 @@ class AppMarketPlanSubscription extends Model
     public function scopeFindEndedPeriod(Builder $builder): Builder
     {
         return $builder->where('ends_at', '<=', now());
+    }
+
+    /**
+     * Scope all active subscriptions for a user.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFindActive(Builder $builder): Builder
+    {
+        return $builder->where('ends_at', '>', now());
     }
 
     /**
