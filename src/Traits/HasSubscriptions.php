@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rinvex\Subscriptions\Traits;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 use Rinvex\Subscriptions\Models\AppMarketPlan;
+use Rinvex\Subscriptions\Models\AppMarketPlanOffers;
 use Rinvex\Subscriptions\Services\Period;
 use Illuminate\Database\Eloquent\Collection;
 use Rinvex\Subscriptions\Models\AppMarketPlanSubscription;
@@ -126,9 +126,18 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription
      */
-    public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15): AppMarketPlanSubscription
+    public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15, $activateOffer = true): AppMarketPlanSubscription
     {
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $startDate ?? now());
+
+        /* Auto apply plan offer by default it is true */
+        /* @var AppMarketPlanOffers $planOffer */
+        $planOffer = $plan->offers()->first();
+        $endDate = $period->getEndDate()->addDays($remainingDays);
+
+        if($planOffer && $activateOffer) {
+            $endDate = $endDate->addDays($planOffer->getOfferPeriod());
+        }
 
         return $this->subscriptions()->create([
             'name' => $subscription,
@@ -141,7 +150,7 @@ trait HasSubscriptions
             'amount_left' => $plan->price > 0 ? $plan->price * 100 + ($plan->price * $tax_percentage * 100) : 0,
             'amount_left_without_tax' => $plan->price * 100,
             'starts_at' => $period->getStartDate(),
-            'ends_at' => $period->getEndDate()->addDay($remainingDays),
+            'ends_at' => $endDate,
             'purchase_id' => $purchaseId,
         ]);
     }

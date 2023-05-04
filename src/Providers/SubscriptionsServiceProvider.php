@@ -6,6 +6,7 @@ namespace Rinvex\Subscriptions\Providers;
 
 use Rinvex\Subscriptions\Models\AppMarketPlan;
 use Illuminate\Support\ServiceProvider;
+use Rinvex\Subscriptions\Models\AppMarketPlanOffers;
 use Rinvex\Support\Traits\ConsoleTools;
 use Rinvex\Subscriptions\Models\AppMarketPlanFeature;
 use Rinvex\Subscriptions\Models\AppMarketPlanSubscription;
@@ -44,6 +45,7 @@ class SubscriptionsServiceProvider extends ServiceProvider
             'rinvex.subscriptions.app_market_plan_feature' => AppMarketPlanFeature::class,
             'rinvex.subscriptions.app_market_plan_subscription' => AppMarketPlanSubscription::class,
             'rinvex.subscriptions.app_market_plan_subscription_usage' => AppMarketPlanSubscriptionUsage::class,
+            'rinvex.subscriptions.app_market_plan_offers' => AppMarketPlanOffers::class,
         ]);
 
         // Register console commands
