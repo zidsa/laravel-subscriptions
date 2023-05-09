@@ -235,6 +235,16 @@ class AppMarketPlan extends Model implements Sortable
     }
 
     /**
+     * Check if plan is free.
+     *
+     * @return bool
+     */
+    public function isFree(): bool
+    {
+        return (float) $this->price <= 0.00;
+    }
+
+    /**
      * The plan may have offers.
      *
      * @return HasOne
