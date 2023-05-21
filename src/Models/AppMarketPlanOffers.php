@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class AppMarketPlanOffers extends Model
 {
     use SoftDeletes;
-    use HasTranslations;
     use ValidatingTrait;
 
     /**
@@ -24,6 +23,7 @@ class AppMarketPlanOffers extends Model
         'description',
         'is_active',
         'price',
+        'coupon_id',
         'app_id',
         'plan_id',
         'purchasable_id',
@@ -37,6 +37,8 @@ class AppMarketPlanOffers extends Model
      */
     protected $casts = [
         'is_active' => 'boolean',
+        'name' => 'array',
+        'description' => 'array',
         'price' => 'float',
         'app_id' => 'integer',
         'purchasable_id' => 'string',
@@ -51,16 +53,6 @@ class AppMarketPlanOffers extends Model
     protected $observables = [
         'validating',
         'validated',
-    ];
-
-    /**
-     * The attributes that are translatable.
-     *
-     * @var array
-     */
-    public $translatable = [
-        'name',
-        'description',
     ];
 
     /**
@@ -89,8 +81,8 @@ class AppMarketPlanOffers extends Model
 
         $this->setTable(config('rinvex.subscriptions.tables.app_market_plan_offers'));
         $this->setRules([
-            'name' => 'required|string|strip_tags|max:150',
-            'description' => 'nullable|string|max:32768',
+            'name' => 'required|max:150',
+            'description' => 'nullable|max:32768',
             'is_active' => 'sometimes|boolean',
             'price' => 'required|numeric',
             'offer_period' => 'sometimes|integer|max:100000',

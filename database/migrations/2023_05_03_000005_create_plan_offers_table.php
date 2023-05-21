@@ -23,6 +23,7 @@ class CreatePlanOffersTable extends Migration
             $table->json('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->decimal('price')->default('0.00');
+            $table->uuid('coupon_id');
             $table->smallInteger('offer_period')->unsigned()->default(0);
             $table->string('offer_interval')->default('day');
             $table->timestamps();
