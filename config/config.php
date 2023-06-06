@@ -13,6 +13,7 @@ return [
         'app_market_plan_features' => 'app_market_plan_features',
         'app_market_plan_subscriptions' => 'app_market_plan_subscriptions',
         'app_market_plan_subscription_usage' => 'app_market_plan_subscription_usage',
+        'app_market_plan_offers' => 'app_market_plan_offers',
     ],
 
     // Subscriptions Models
@@ -22,7 +23,7 @@ return [
         'app_market_plan_feature' => \Rinvex\Subscriptions\Models\AppMarketPlanFeature::class,
         'app_market_plan_subscription' => \Rinvex\Subscriptions\Models\AppMarketPlanSubscription::class,
         'app_market_plan_subscription_usage' => \Rinvex\Subscriptions\Models\AppMarketPlanSubscriptionUsage::class,
-
+        'app_market_plan_offers' => \Rinvex\Subscriptions\Models\AppMarketPlanOffers::class,
     ],
 
 ];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rinvex\Subscriptions\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Sluggable\SlugOptions;
 use Rinvex\Support\Traits\HasSlug;
 use Spatie\EloquentSortable\Sortable;
@@ -241,6 +242,26 @@ class AppMarketPlan extends Model implements Sortable
     public function isFree(): bool
     {
         return (float) $this->price <= 0.00;
+    }
+
+    /**
+     * The plan may have offers.
+     *
+     * @return HasOne
+     */
+    public function offers(): HasOne
+    {
+        return $this->hasOne(config('rinvex.subscriptions.models.app_market_plan_offers'), 'plan_id', 'id');
+    }
+
+    /**
+     * Check if plan has offers.
+     *
+     * @return bool
+     */
+    public function hasOffer(): bool
+    {
+        return $this->offers()->exists();
     }
 
     /**
