@@ -16,7 +16,7 @@ class CreatePlanOffersTable extends Migration
     {
         Schema::create(config('rinvex.subscriptions.tables.app_market_plan_offers'), function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('app_id')->autoIncrement();
+            $table->unsignedBigInteger('app_id');
             $table->integer('plan_id')->unsigned();
             $table->uuid('purchasable_id');
             $table->json('name')->nullable();
