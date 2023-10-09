@@ -100,9 +100,12 @@ trait HasSubscriptions
         $trial = new Period($plan->trial_interval, $plan->trial_period - 1 , $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $trial->getEndDate());
 
+        $uuid = Uuid::uuid4()->toString();
+
         return $this->subscriptions()->create([
             'name' => $subscription,
-            'uuid' => Uuid::uuid4()->toString(),
+            'uuid' => $uuid,
+            'slug' => $uuid,
             'store_uuid' => $storeUUid,
             'plan_id' => $plan->getKey(),
             'app_id' => $plan->getAppId(),
