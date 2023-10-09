@@ -133,6 +133,8 @@ trait HasSubscriptions
     {
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $startDate ?? now());
 
+        $uuid = Uuid::uuid4()->toString();
+
         /* Auto apply plan offer by default it is true */
         /* @var AppMarketPlanOffers $planOffer */
         $planOffer = $plan->offers()->first();
@@ -144,7 +146,8 @@ trait HasSubscriptions
 
         return $this->subscriptions()->create([
             'name' => $subscription,
-            'uuid' => Uuid::uuid4()->toString(),
+            'uuid' => $uuid,
+            'slug' => $uuid,
             'store_uuid' => $storeUUid,
             'plan_id' => $plan->getKey(),
             'app_id' => $plan->getAppId(),
@@ -172,9 +175,12 @@ trait HasSubscriptions
     {
         $trial = new Period($plan->trial_interval, $plan->trial_period - 1, $startDate ?? now());
 
+        $uuid = Uuid::uuid4()->toString();
+
         return $this->subscriptions()->create([
             'name' => $subscription,
-            'uuid' => Uuid::uuid4()->toString(),
+            'uuid' => $uuid,
+            'slug' => $uuid,
             'store_uuid' => $storeUUid,
             'plan_id' => $plan->getKey(),
             'app_id' => $plan->getAppId(),
