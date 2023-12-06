@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddSignupFeePurchasableIdToPlanTable extends Migration
+class AddSignupFeePurchasableIdToPlansTable extends Migration
 {
     /**
      * Run the migrations.
