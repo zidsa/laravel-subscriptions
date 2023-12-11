@@ -29,6 +29,8 @@ class AppMarketPlanOffers extends Model
         'purchasable_id',
         'offer_period',
         'offer_interval',
+        'type',
+        'discount',
     ];
 
 
@@ -45,6 +47,8 @@ class AppMarketPlanOffers extends Model
         'offer_period' => 'integer',
         'offer_interval' => 'string',
         'deleted_at' => 'datetime',
+        'type' => 'string',
+        'discount' => 'integer'
     ];
 
     /**
