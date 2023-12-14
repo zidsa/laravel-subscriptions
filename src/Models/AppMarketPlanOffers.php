@@ -91,6 +91,8 @@ class AppMarketPlanOffers extends Model
             'price' => 'required|numeric',
             'offer_period' => 'sometimes|integer|max:100000',
             'offer_interval' => 'sometimes|in:hour,day,week,month',
+            'discount' => 'nullable|integer',
+            'type' => 'nullable|string',
         ]);
     }
 
