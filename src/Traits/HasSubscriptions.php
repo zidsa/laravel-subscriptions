@@ -95,8 +95,10 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription
      */
-    public function newSubscription($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15): AppMarketPlanSubscription
+    public function newSubscription($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15, ?float $amountLeft = null, ?float $amountLeftWithoutTax = null): AppMarketPlanSubscription
     {
+        $amountLeftArray = $this->getAmountLeft($plan->price, $tax_percentage, $amountLeft, $amountLeftWithoutTax);
+
         $trial = new Period($plan->trial_interval, $plan->trial_period - 1 , $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $trial->getEndDate());
 
@@ -111,8 +113,8 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_recurring' => $isRecurring,
-            'amount_left' => $plan->price > 0 ? $plan->price * 100 + ($plan->price * $tax_percentage * 100) : 0,
-            'amount_left_without_tax' => $plan->price * 100,
+            'amount_left' => $amountLeftArray[0],
+            'amount_left_without_tax' => $amountLeftArray[1],
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $period->getStartDate(),
             'ends_at' => $period->getEndDate()->addDay($remainingDays),
@@ -129,8 +131,9 @@ trait HasSubscriptions
      *
      * @return \Rinvex\Subscriptions\Models\AppMarketPlanSubscription
      */
-    public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15, $activateOffer = true): AppMarketPlanSubscription
+    public function newSubscriptionWithoutTrial($purchaseId, $storeUUid, $subscription, AppMarketPlan $plan, Carbon $startDate = null, $status, $isRecurring = false, $remainingDays = 0, $tax_percentage = 0.15, $activateOffer = true, ?float $amountLeft = null, ?float $amountLeftWithoutTax = null): AppMarketPlanSubscription
     {
+        $amountLeftArray = $this->getAmountLeft($plan->price, $tax_percentage, $amountLeft, $amountLeftWithoutTax);
         $period = new Period($plan->invoice_interval, $plan->invoice_period - 1, $startDate ?? now());
 
         $uuid = Uuid::uuid4()->toString();
@@ -153,8 +156,8 @@ trait HasSubscriptions
             'app_id' => $plan->getAppId(),
             'status' => $status,
             'is_recurring' => $isRecurring,
-            'amount_left' => $plan->price > 0 ? $plan->price * 100 + ($plan->price * $tax_percentage * 100) : 0,
-            'amount_left_without_tax' => $plan->price * 100,
+            'amount_left' => $amountLeftArray[0],
+            'amount_left_without_tax' => $amountLeftArray[1],
             'starts_at' => $period->getStartDate(),
             'ends_at' => $endDate,
             'purchase_id' => $purchaseId,
@@ -195,4 +198,15 @@ trait HasSubscriptions
         ]);
     }
 
+    protected function getAmountLeft(?float $planPrice, float $taxPercentage = 0.15, ?float $amountLeft = null, ?float $amountLeftWithoutTax = null): array
+    {
+        if (!is_null($amountLeft) && !is_null($amountLeftWithoutTax)) {
+            return [$amountLeft, $amountLeftWithoutTax];
+        }
+
+        return [
+            $planPrice ? $planPrice * 100 + ($planPrice * $taxPercentage * 100) : 0,
+            $planPrice ? $planPrice * 100 : 0
+        ];
+    }
 }
