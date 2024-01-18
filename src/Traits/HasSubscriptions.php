@@ -138,15 +138,13 @@ trait HasSubscriptions
 
         $uuid = Uuid::uuid4()->toString();
 
-        /* Auto apply plan offer by default it is true */
-        /* @var AppMarketPlanOffers $planOffer */
+        /**
+         * @var AppMarketPlanOffers $planOffer
+         */
         $planOffer = $plan->offers;
-        // Note: Only buy x get y offer will increase the subscription period
-        if ($planOffer?->type === 'buy_x_get_y') {
-            $endDate = $period->getEndDate()->addDays($remainingDays);
-        }
+        $endDate = $period->getEndDate()->addDays($remainingDays);
 
-        if($planOffer && $activateOffer) {
+        if($planOffer && $activateOffer && $planOffer->type === 'buy_x_get_y') {
             $endDate = $endDate->addDays($planOffer->getOfferPeriod());
         }
 
