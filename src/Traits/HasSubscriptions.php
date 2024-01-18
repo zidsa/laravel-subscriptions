@@ -142,7 +142,7 @@ trait HasSubscriptions
         /* @var AppMarketPlanOffers $planOffer */
         $planOffer = $plan->offers;
         // Note: Only buy x get y offer will increase the subscription period
-        if ($planOffer->type === 'buy_x_get_y') {
+        if ($planOffer?->type === 'buy_x_get_y') {
             $endDate = $period->getEndDate()->addDays($remainingDays);
         }
 
