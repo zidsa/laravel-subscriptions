@@ -140,8 +140,11 @@ trait HasSubscriptions
 
         /* Auto apply plan offer by default it is true */
         /* @var AppMarketPlanOffers $planOffer */
-        $planOffer = $plan->offers()->first();
-        $endDate = $period->getEndDate()->addDays($remainingDays);
+        $planOffer = $plan->offers;
+        // Note: Only buy x get y offer will increase the subscription period
+        if ($planOffer->type === 'buy_x_get_y') {
+            $endDate = $period->getEndDate()->addDays($remainingDays);
+        }
 
         if($planOffer && $activateOffer) {
             $endDate = $endDate->addDays($planOffer->getOfferPeriod());
