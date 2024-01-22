@@ -29,6 +29,8 @@ class AppMarketPlanOffers extends Model
         'purchasable_id',
         'offer_period',
         'offer_interval',
+        'type',
+        'discount',
     ];
 
 
@@ -45,6 +47,8 @@ class AppMarketPlanOffers extends Model
         'offer_period' => 'integer',
         'offer_interval' => 'string',
         'deleted_at' => 'datetime',
+        'type' => 'string',
+        'discount' => 'integer'
     ];
 
     /**
@@ -87,6 +91,8 @@ class AppMarketPlanOffers extends Model
             'price' => 'required|numeric',
             'offer_period' => 'sometimes|integer|max:100000',
             'offer_interval' => 'sometimes|in:hour,day,week,month',
+            'discount' => 'nullable|integer',
+            'type' => 'nullable|string',
         ]);
     }
 
