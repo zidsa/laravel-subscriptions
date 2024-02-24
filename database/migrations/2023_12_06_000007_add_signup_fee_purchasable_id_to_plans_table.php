@@ -15,7 +15,7 @@ class AddSignupFeePurchasableIdToPlansTable extends Migration
     public function up(): void
     {
         Schema::table(config('rinvex.subscriptions.tables.app_market_plans'), function (Blueprint $table) {
-            $table->uuid('signup_fee_purchasable_id');
+            $table->uuid('signup_fee_purchasable_id')->after('purchasable_id')->nullable();
         });
     }
 
