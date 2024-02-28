@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int                 $id
  * @property string              $slug
+ * @property string              $purchasable_id
+ * @property string              $signup_fee_purchasable_id
  * @property array               $name
  * @property array               $description
  * @property bool                $is_active
@@ -87,6 +89,7 @@ class AppMarketPlan extends Model implements Sortable
         'price',
         'app_id',
         'purchasable_id',
+        'signup_fee_purchasable_id',
         'signup_fee',
         'currency',
         'trial_period',
@@ -113,6 +116,7 @@ class AppMarketPlan extends Model implements Sortable
         'currency' => 'string',
         'app_id' => 'integer',
         'purchasable_id' => 'string',
+        'signup_fee_purchasable_id' => 'string',
         'trial_period' => 'integer',
         'trial_interval' => 'string',
         'invoice_period' => 'integer',
