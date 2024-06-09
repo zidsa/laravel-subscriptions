@@ -14,6 +14,7 @@ use Rinvex\Support\Traits\ValidatingTrait;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Rinvex\Subscriptions\Traits\HasPrivate;
 
 /**
  * Rinvex\Subscriptions\Models\Plan.
@@ -77,6 +78,7 @@ class AppMarketPlan extends Model implements Sortable
     use SortableTrait;
     use HasTranslations;
     use ValidatingTrait;
+    use HasPrivate;
 
     /**
      * {@inheritdoc}
@@ -103,6 +105,7 @@ class AppMarketPlan extends Model implements Sortable
         'prorate_extend_due',
         'active_subscribers_limit',
         'sort_order',
+        'is_private',
     ];
 
     /**
@@ -129,6 +132,7 @@ class AppMarketPlan extends Model implements Sortable
         'active_subscribers_limit' => 'integer',
         'sort_order' => 'integer',
         'deleted_at' => 'datetime',
+        'is_private' => 'boolean',
     ];
 
     /**
@@ -188,6 +192,7 @@ class AppMarketPlan extends Model implements Sortable
             'name' => 'required|string|strip_tags|max:150',
             'description' => 'nullable|string|max:32768',
             'is_active' => 'sometimes|boolean',
+            'is_private' => 'sometimes|boolean',
             'price' => 'required|numeric',
             'signup_fee' => 'required|numeric',
             'currency' => 'required|alpha|size:3',
