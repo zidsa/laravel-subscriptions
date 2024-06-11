@@ -25,6 +25,7 @@ use Rinvex\Subscriptions\Traits\HasPrivate;
  * @property string              $signup_fee_purchasable_id
  * @property array               $name
  * @property array               $description
+ * @property string              $note
  * @property bool                $is_active
  * @property float               $price
  * @property float               $signup_fee
@@ -87,6 +88,7 @@ class AppMarketPlan extends Model implements Sortable
         'slug',
         'name',
         'description',
+        'note',
         'is_active',
         'price',
         'app_id',
@@ -206,6 +208,7 @@ class AppMarketPlan extends Model implements Sortable
             'prorate_period' => 'nullable|integer|max:150',
             'prorate_extend_due' => 'nullable|integer|max:150',
             'active_subscribers_limit' => 'nullable|integer|max:100000',
+            'note' => 'nullable|string|max:1000',
         ]);
     }
 
