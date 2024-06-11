@@ -10,6 +10,6 @@ class PrivateScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('is_private', false);
+        $builder->whereNull('store_id');
     }
 }

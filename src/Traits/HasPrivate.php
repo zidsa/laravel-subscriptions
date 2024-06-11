@@ -21,12 +21,12 @@ trait HasPrivate
     public function scopeWithoutPrivate(Builder $builder)
     {
         return $builder->withoutGlobalScope(PrivateScope::class)
-            ->where('is_private', false);
+            ->whereNull('store_id');
     }
 
     public function scopeOnlyPrivate(Builder $builder)
     {
         return $builder->withoutGlobalScope(PrivateScope::class)
-            ->where('is_private', true);
+            ->whereNotNull('store_id');
     }
 }

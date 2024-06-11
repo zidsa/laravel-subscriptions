@@ -15,7 +15,7 @@ class AddStoreIdToPlansTable extends Migration
     public function up(): void
     {
         Schema::table(config('rinvex.subscriptions.tables.app_market_plans'), function (Blueprint $table) {
-            $table->boolean('store_id')->after('is_private')->nullable();
+            $table->boolean('store_id')->after('app_id')->nullable();
         });
     }
 }
