@@ -13,18 +13,18 @@ trait HasPrivate
         static::addGlobalScope(new PrivateScope);
     }
 
-    public function scopeWithPrivate(Builder $builder)
+    public function scopeWithPrivate($builder)
     {
         return $builder->withoutGlobalScope(PrivateScope::class);
     }
 
-    public function scopeWithoutPrivate(Builder $builder)
+    public function scopeWithoutPrivate($builder)
     {
         return $builder->withoutGlobalScope(PrivateScope::class)
             ->whereNull('store_id');
     }
 
-    public function scopeOnlyPrivate(Builder $builder)
+    public function scopeOnlyPrivate($builder)
     {
         return $builder->withoutGlobalScope(PrivateScope::class)
             ->whereNotNull('store_id');
