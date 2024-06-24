@@ -337,4 +337,9 @@ class AppMarketPlan extends Model implements Sortable
 
         return $this;
     }
+
+    public function getIsPrivate()
+    {
+        return !empty($this->store_id);
+    }
 }
