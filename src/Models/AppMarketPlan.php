@@ -14,6 +14,7 @@ use Rinvex\Support\Traits\ValidatingTrait;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Rinvex\Subscriptions\Traits\HasPrivate;
 
 /**
  * Rinvex\Subscriptions\Models\Plan.
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string              $signup_fee_purchasable_id
  * @property array               $name
  * @property array               $description
+ * @property string              $note
  * @property bool                $is_active
  * @property float               $price
  * @property float               $signup_fee
@@ -77,6 +79,7 @@ class AppMarketPlan extends Model implements Sortable
     use SortableTrait;
     use HasTranslations;
     use ValidatingTrait;
+    use HasPrivate;
 
     /**
      * {@inheritdoc}
@@ -85,9 +88,11 @@ class AppMarketPlan extends Model implements Sortable
         'slug',
         'name',
         'description',
+        'note',
         'is_active',
         'price',
         'app_id',
+        'store_id',
         'purchasable_id',
         'signup_fee_purchasable_id',
         'signup_fee',
@@ -115,6 +120,7 @@ class AppMarketPlan extends Model implements Sortable
         'signup_fee' => 'float',
         'currency' => 'string',
         'app_id' => 'integer',
+        'store_id' => 'integer',
         'purchasable_id' => 'string',
         'signup_fee_purchasable_id' => 'string',
         'trial_period' => 'integer',
@@ -202,6 +208,7 @@ class AppMarketPlan extends Model implements Sortable
             'prorate_period' => 'nullable|integer|max:150',
             'prorate_extend_due' => 'nullable|integer|max:150',
             'active_subscribers_limit' => 'nullable|integer|max:100000',
+            'note' => 'nullable|string|max:1000',
         ]);
     }
 
@@ -329,5 +336,10 @@ class AppMarketPlan extends Model implements Sortable
         $this->update(['is_active' => false]);
 
         return $this;
+    }
+
+    public function getIsPrivate()
+    {
+        return !empty($this->store_id);
     }
 }
