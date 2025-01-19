@@ -108,6 +108,8 @@ class AppMarketPlan extends Model implements Sortable
         'prorate_extend_due',
         'active_subscribers_limit',
         'sort_order',
+        'is_usage_based',
+        'meta',
     ];
 
     /**
@@ -135,6 +137,8 @@ class AppMarketPlan extends Model implements Sortable
         'active_subscribers_limit' => 'integer',
         'sort_order' => 'integer',
         'deleted_at' => 'datetime',
+        'is_usage_based' => 'boolean',
+        'meta' => 'array',
     ];
 
     /**
