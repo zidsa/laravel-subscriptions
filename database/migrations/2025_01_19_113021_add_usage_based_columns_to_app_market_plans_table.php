@@ -11,5 +11,8 @@ return new class extends Migration {
             $table->boolean('is_usage_based')->default(false);
             $table->json('meta')->nullable();
         });
+        Schema::table(config('rinvex.subscriptions.tables.app_market_plan_subscriptions'), function (Blueprint $table) {
+            $table->boolean('is_usage_based')->default(false);
+        });
     }
 };

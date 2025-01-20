@@ -97,6 +97,7 @@ class AppMarketPlanSubscription extends Model
         'ends_at',
         'cancels_at',
         'canceled_at',
+        'is_usage_based',
     ];
 
     /**
