@@ -129,7 +129,7 @@ trait HasSubscriptions
             'amount_left_without_tax' => $amountLeftArray[1],
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $period->getStartDate(),
-            'ends_at' => $period->getEndDate()->addDay($remainingDays),
+            'ends_at' => $isUsageBased ? null : $period->getEndDate()->addDay($remainingDays),
             'purchase_id' => $purchaseId,
             'is_usage_based' => $isUsageBased,
         ]);
@@ -173,7 +173,9 @@ trait HasSubscriptions
         if($planOffer && $activateOffer && $planOffer->type === 'buy_x_get_y') {
             $endDate = $endDate->addDays($planOffer->getOfferPeriod());
         }
-
+        if ($isUsageBased) {
+            $endDate = null;
+        }
         return $this->subscriptions()->create([
             'name' => $subscription,
             'uuid' => $uuid,
