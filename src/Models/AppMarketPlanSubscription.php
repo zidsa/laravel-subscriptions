@@ -360,8 +360,11 @@ class AppMarketPlanSubscription extends Model
             // Clear usage data
             $subscription->usage()->delete();
 
-            // Renew period
-            $subscription->setNewPeriod();
+            // Renew period - a usage-based subscription has no fixed period to renew, so leave
+            // its null ends_at alone rather than forcing a computed date onto it.
+            if (! $subscription->is_usage_based) {
+                $subscription->setNewPeriod();
+            }
             $subscription->canceled_at = null;
             $subscription->save();
         });
