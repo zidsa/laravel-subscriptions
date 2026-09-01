@@ -70,7 +70,9 @@ class AppMarketPlanSubscription extends Model
     use SoftDeletes;
     use BelongsToPlan;
     use HasTranslations;
-    use ValidatingTrait;
+    use ValidatingTrait {
+        getRules as private traitGetRules;
+    }
 
     /**
      * {@inheritdoc}
@@ -172,6 +174,24 @@ class AppMarketPlanSubscription extends Model
             'cancels_at' => 'nullable|date',
             'canceled_at' => 'nullable|date',
         ]);
+    }
+
+    /**
+     * Get the global validation rules, relaxing ends_at to nullable for a usage-based
+     * subscription - the constructor sets it required|date unconditionally, which would reject
+     * the intentional null ends_at a usage-based subscription is created with.
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        $rules = $this->traitGetRules();
+
+        if ($this->is_usage_based && isset($rules['ends_at'])) {
+            $rules['ends_at'] = 'nullable|date';
+        }
+
+        return $rules;
     }
 
     /**
