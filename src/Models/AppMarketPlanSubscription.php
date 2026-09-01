@@ -182,7 +182,10 @@ class AppMarketPlanSubscription extends Model
         parent::boot();
 
         static::validating(function (self $model) {
-            if (! $model->starts_at || ! $model->ends_at) {
+            // A usage-based subscription has no fixed period, so a null ends_at is intentional
+            // (see newSubscription()/newSubscriptionWithoutTrial() with isUsageBased: true) - only
+            // starts_at missing should trigger a recompute for it, not ends_at being null too.
+            if (! $model->starts_at || (! $model->ends_at && ! $model->is_usage_based)) {
                 $model->setNewPeriod();
             }
         });
