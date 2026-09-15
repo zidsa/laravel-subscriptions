@@ -70,7 +70,9 @@ class AppMarketPlanSubscription extends Model
     use SoftDeletes;
     use BelongsToPlan;
     use HasTranslations;
-    use ValidatingTrait;
+    use ValidatingTrait {
+        getRules as private traitGetRules;
+    }
 
     /**
      * {@inheritdoc}
@@ -175,6 +177,24 @@ class AppMarketPlanSubscription extends Model
     }
 
     /**
+     * Get the global validation rules, relaxing ends_at to nullable for a usage-based
+     * subscription - the constructor sets it required|date unconditionally, which would reject
+     * the intentional null ends_at a usage-based subscription is created with.
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        $rules = $this->traitGetRules();
+
+        if ($this->is_usage_based && isset($rules['ends_at'])) {
+            $rules['ends_at'] = 'nullable|date';
+        }
+
+        return $rules;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected static function boot()
@@ -182,7 +202,10 @@ class AppMarketPlanSubscription extends Model
         parent::boot();
 
         static::validating(function (self $model) {
-            if (! $model->starts_at || ! $model->ends_at) {
+            // A usage-based subscription has no fixed period, so a null ends_at is intentional
+            // (see newSubscription()/newSubscriptionWithoutTrial() with isUsageBased: true) - only
+            // starts_at missing should trigger a recompute for it, not ends_at being null too.
+            if (! $model->starts_at || (! $model->ends_at && ! $model->is_usage_based)) {
                 $model->setNewPeriod();
             }
         });
@@ -337,8 +360,11 @@ class AppMarketPlanSubscription extends Model
             // Clear usage data
             $subscription->usage()->delete();
 
-            // Renew period
-            $subscription->setNewPeriod();
+            // Renew period - a usage-based subscription has no fixed period to renew, so leave
+            // its null ends_at alone rather than forcing a computed date onto it.
+            if (! $subscription->is_usage_based) {
+                $subscription->setNewPeriod();
+            }
             $subscription->canceled_at = null;
             $subscription->save();
         });

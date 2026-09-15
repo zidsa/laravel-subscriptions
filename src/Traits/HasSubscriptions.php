@@ -7,7 +7,6 @@ namespace Rinvex\Subscriptions\Traits;
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use Rinvex\Subscriptions\Models\AppMarketPlan;
-use Rinvex\Subscriptions\Models\AppMarketPlanOffers;
 use Rinvex\Subscriptions\Services\Period;
 use Illuminate\Database\Eloquent\Collection;
 use Rinvex\Subscriptions\Models\AppMarketPlanSubscription;
@@ -154,7 +153,6 @@ trait HasSubscriptions
         $isRecurring = false,
         $remainingDays = 0,
         $tax_percentage = 0.15,
-        $activateOffer = true,
         ?float $amountLeft = null,
         ?float $amountLeftWithoutTax = null,
         bool $isUsageBased = false,
@@ -164,18 +162,8 @@ trait HasSubscriptions
 
         $uuid = Uuid::uuid4()->toString();
 
-        /**
-         * @var AppMarketPlanOffers $planOffer
-         */
-        $planOffer = $plan->offers;
-        $endDate = $period->getEndDate()->addDays($remainingDays);
+        $endDate = $isUsageBased ? null : $period->getEndDate()->addDays($remainingDays);
 
-        if($planOffer && $activateOffer && $planOffer->type === 'buy_x_get_y') {
-            $endDate = $endDate->addDays($planOffer->getOfferPeriod());
-        }
-        if ($isUsageBased) {
-            $endDate = null;
-        }
         return $this->subscriptions()->create([
             'name' => $subscription,
             'uuid' => $uuid,

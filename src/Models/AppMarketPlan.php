@@ -260,13 +260,18 @@ class AppMarketPlan extends Model implements Sortable
     }
 
     /**
-     * The plan may have offers.
+     * The plan's current offer. A plan is only ever meant to carry one active offer at a time,
+     * but nothing enforces that at the database level - scoped here so every caller (eager-loaded
+     * or not) reliably gets that one offer instead of an arbitrary row when a stale/deactivated
+     * duplicate is still sitting in the table.
      *
      * @return HasOne
      */
     public function offers(): HasOne
     {
-        return $this->hasOne(config('rinvex.subscriptions.models.app_market_plan_offers'), 'plan_id', 'id');
+        return $this->hasOne(config('rinvex.subscriptions.models.app_market_plan_offers'), 'plan_id', 'id')
+            ->where('is_active', true)
+            ->orderByDesc('id');
     }
 
     /**
